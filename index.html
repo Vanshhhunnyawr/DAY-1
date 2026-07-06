@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cheer Up Rubaani 🌸</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@700&family=Montserrat:wght@400;600&display=swap');
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            user-select: none;
+            -webkit-user-select: none;
+        }
+
+        body {
+            background-color: #0b0c10;
+            color: #ffffff;
+            font-family: 'Montserrat', sans-serif;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: center;
+            overflow: hidden;
+            background-image: radial-gradient(circle at 50% 50%, #1f2833 0%, #0b0c10 80%);
+            padding: 30px 20px;
+        }
+
+        header {
+            text-align: center;
+            margin-top: 10px;
+        }
+
+        h1 {
+            font-family: 'Cinzel', serif;
+            font-size: 2.2rem;
+            color: #ffffff;
+            text-shadow: 0 0 10px #ff75a0, 0 0 20px #ff75a0;
+            margin-bottom: 8px;
+            letter-spacing: 1px;
+        }
+
+        p.subtitle {
+            font-size: 0.95rem;
+            color: #c5c6c7;
+            max-width: 320px;
+            line-height: 1.4;
+        }
+
+        /* Progress Bar Section */
+        .tracker-container {
+            width: 100%;
+            max-width: 350px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .status-labels {
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.85rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 8px;
+            padding: 0 5px;
+        }
+
+        .label-sad {
+            color: #555;
+            transition: color 0.3s;
+        }
+
+        .label-happy {
+            color: #ff75a0;
+            text-shadow: 0 0 8px rgba(255, 117, 160, 0.6);
+        }
+
+        .progress-outer {
+            width: 100%;
+            height: 24px;
+            background: rgba(31, 40, 51, 0.6);
+            border: 1px solid rgba(255, 117, 160, 0.2);
+            border-radius: 12px;
+            padding: 3px;
+            box-shadow: inset 0 2px 5px rgba(0,0,0,0.5);
+            position: relative;
+        }
+
+        .progress-inner {
+            height: 100%;
+            width: 10%; /* Starts at 10% */
+            background: linear-gradient(90deg, #ff416c, #ff75a0);
+            border-radius: 9px;
+            box-shadow: 0 0 15px #ff75a0;
+            transition: width 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        /* Core Interactive Heart */
+        .heart-container {
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 200px;
+            height: 200px;
+            margin: auto 0;
+        }
+
+        .main-heart {
+            font-size: 6rem;
+            cursor: pointer;
+            z-index: 10;
+            filter: drop-shadow(0 0 10px rgba(255, 117, 160, 0.3));
+            transition: transform 0.1s ease;
+        }
+
+        .main-heart:active {
+            transform: scale(0.85);
+        }
+
+        .glow-ring {
+            position: absolute;
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            border: 2px solid #ff75a0;
+            opacity: 0;
+            pointer-events: none;
+            z-index: 5;
+        }
+
+        @keyframes ripple {
+            0% { transform: scale(0.6); opacity: 1; }
+            100% { transform: scale(1.8); opacity: 0; border-width: 1px; }
+        }
+
+        .sparkle {
+            position: absolute;
+            pointer-events: none;
+            font-size: 1.5rem;
+            z-index: 12;
+            animation: floatUp 0.8s ease-out forwards;
+        }
+
+        @keyframes floatUp {
+            0% { transform: translate(0, 0) scale(0.5); opacity: 1; }
+            100% { transform: translate(var(--x), var(--y)) scale(1.2); opacity: 0; }
+        }
+
+        /* Message Display Box */
+        .message-box {
+            min-height: 50px;
+            max-width: 340px;
+            text-align: center;
+            font-size: 1rem;
+            line-height: 1.5;
+            color: #ff75a0;
+            font-weight: 600;
+            text-shadow: 0 0 5px rgba(255, 117, 160, 0.2);
+            transition: all 0.3s ease;
+            margin-bottom: 20px;
+            padding: 0 10px;
+        }
+
+        footer {
+            font-size: 0.8rem;
+            color: #4f5d75;
+            letter-spacing: 1px;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>For Rubaani 🌸</h1>
+        <p class="subtitle">Tap the heart to charge your mood battery & see what happens!</p>
+    </header>
+
+    <div class="tracker-container">
+        <div class="status-labels">
+            <span class="label-sad" id="sadLabel">Sad 😔</span>
+            <span class="label-happy">Happy 🥰</span>
+        </div>
+        <div class="progress-outer">
+            <div class="progress-inner" id="moodBar"></div>
+        </div>
+    </div>
+
+    <div class="heart-container">
+        <div class="main-heart" id="heartBtn">💖</div>
+        <div class="glow-ring" id="ring"></div>
+    </div>
+
+    <div class="message-box" id="msgBox">
+        Tap the heart! Let's get that smile back... ✨
+    </div>
+
+    <footer>
+        MADE WITH 💗 FOR YOU
+    </footer>
+
+    <script>
+        const heartBtn = document.getElementById('heartBtn');
+        const moodBar = document.getElementById('moodBar');
+        const msgBox = document.getElementById('msgBox');
+        const ring = document.getElementById('ring');
+        const sadLabel = document.getElementById('sadLabel');
+
+        let clickCount = 0;
+        let currentWidth = 10;
+
+        const sweetMessages = [
+            "Aapki smile instant serotonin boost hai, pata hai na? 😭🌸",
+            "Don't ever think you're not enough... you are amazing! 🫶",
+            "God ne extra time leke banaya hai aapko seriouslyyy ✨",
+            "Whenever I think of you, automatically smile aa jaati hai 🤭",
+            "Agar happiness ek person hoti na, toh woh aap jaisi hoti 💗",
+            "World's most unique original piece ho aap! Simulator impossible hai 🤍",
+            "Aapki voice ke background me humesha lo-fi chalta hai kya? 😭🤍",
+            "Aapki eyes bina bole hi bohot kuch bol deti hain 👀✨",
+            "Talented, creative, pretty aur humble sab ek saath kaise ho? 🎨🫶",
+            "Being effortlessly cool ka direct winner trophy aapko hi jayega 🏆",
+            "Life agar Netflix hoti toh aap humesha main character hote! 🎬🌟",
+            "Mirror check karo ek baar... pure perfection dikhega 😭✨",
+            "Aapki drawings dekh kar automatically zoom karne ka mann karta h 🎨",
+            "Aap sunshine ka human form ho bilkul... keep smiling pleaseee 🌸💗"
+        ];
+
+        const finalMessages = [
+            "Yayyy! Mood full charge!! Now look at your mirror and smile 🥳💗",
+            "Universe ki sabse cute profile fully energized! 🥰✨",
+            "Aapki smile load ho gayi! Ab rona strict mana hai okieie?? 🤫🌸"
+        ];
+
+        heartBtn.addEventListener('click', (e) => {
+            if (clickCount >= 15) {
+                // Fully charged, pick random celebration text
+                const randomFinal = finalMessages[Math.floor(Math.random() * finalMessages.length)];
+                msgBox.innerHTML = randomFinal;
+                createBurstEffect();
+                return;
+            }
+
+            clickCount++;
+            
+            // Increment bar width nicely up to 100%
+            currentWidth = 10 + (clickCount * 6);
+            if (currentWidth > 100) currentWidth = 100;
+            moodBar.style.width = currentWidth + '%';
+
+            // Change colors of Sad label dynamically as it goes up
+            if (currentWidth > 40) sadLabel.style.color = '#333';
+            if (currentWidth > 70) sadLabel.style.color = '#1f2833';
+
+            // Change sweet message
+            const randomMsg = sweetMessages[Math.floor(Math.random() * sweetMessages.length)];
+            msgBox.innerHTML = randomMsg;
+
+            // Trigger ripple ring animation
+            ring.style.animation = 'none';
+            void ring.offsetWidth; // trigger reflow
+            ring.style.animation = 'ripple 0.6s ease-out';
+
+            // Create little sparkle/heart bursts
+            createSparkle();
+        });
+
+        function createSparkle() {
+            const container = document.querySelector('.heart-container');
+            const elements = ['🌸', '✨', '💗', '⭐', '🎨'];
+            
+            for(let i=0; i<4; i++) {
+                const sparkle = document.createElement('div');
+                sparkle.classList.add('sparkle');
+                sparkle.innerHTML = elements[Math.floor(Math.random() * elements.length)];
+                
+                // Random directional offsets
+                const x = (Math.random() - 0.5) * 160;
+                const y = (Math.random() - 0.5) * 160 - 40;
+                
+                sparkle.style.setProperty('--x', `${x}px`);
+                sparkle.style.setProperty('--y', `${y}px`);
+                
+                container.appendChild(sparkle);
+                
+                setTimeout(() => {
+                    sparkle.remove();
+                }, 800);
+            }
+        }
+
+        function createBurstEffect() {
+            for(let i=0; i<3; i++) {
+                setTimeout(createSparkle, i * 150);
+            }
+        }
+    </script>
+</body>
+</html>
